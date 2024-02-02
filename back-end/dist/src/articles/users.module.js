@@ -1,0 +1,16 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.UsersModule = void 0;
+const brandi_1 = require("brandi");
+const tokens_1 = require("../core/container/tokens");
+const users_controller_1 = require("./users.controller");
+const users_repository_1 = require("./users.repository");
+const users_service_1 = require("./users.service");
+exports.UsersModule = new brandi_1.DependencyModule();
+exports.UsersModule.bind(tokens_1.TOKENS.usersController).toInstance(users_controller_1.UsersController).inContainerScope();
+exports.UsersModule.bind(tokens_1.TOKENS.usersRepository).toInstance(users_repository_1.UsersRepository).inContainerScope();
+exports.UsersModule.bind(tokens_1.TOKENS.usersService).toInstance(users_service_1.UsersService).inContainerScope();
+exports.UsersModule.bind(tokens_1.TOKENS.usersPrefix).toConstant('users');
+(0, brandi_1.injected)(users_repository_1.UsersRepository, tokens_1.TOKENS.databaseService);
+(0, brandi_1.injected)(users_service_1.UsersService, tokens_1.TOKENS.usersRepository);
+(0, brandi_1.injected)(users_controller_1.UsersController, tokens_1.TOKENS.usersPrefix, tokens_1.TOKENS.loggerService, tokens_1.TOKENS.usersService);

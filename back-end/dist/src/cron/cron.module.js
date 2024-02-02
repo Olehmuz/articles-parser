@@ -1,0 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.CronModule = void 0;
+const brandi_1 = require("brandi");
+const tokens_1 = require("../core/container/tokens");
+const parser_module_1 = require("../parser/parser.module");
+const cron_service_1 = require("./cron.service");
+exports.CronModule = new brandi_1.DependencyModule();
+exports.CronModule.use(tokens_1.TOKENS.parserService).from(parser_module_1.ParserModule);
+exports.CronModule.bind(tokens_1.TOKENS.cronService).toInstance(cron_service_1.CronService).inContainerScope();
+(0, brandi_1.injected)(cron_service_1.CronService, tokens_1.TOKENS.loggerService, tokens_1.TOKENS.parserService);

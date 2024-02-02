@@ -1,0 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ParserModule = void 0;
+const brandi_1 = require("brandi");
+const tokens_1 = require("../core/container/tokens");
+const articles_module_1 = require("../articles/articles.module");
+const parser_service_1 = require("./parser.service");
+exports.ParserModule = new brandi_1.DependencyModule();
+exports.ParserModule.use(tokens_1.TOKENS.articlesService).from(articles_module_1.ArticlesModule);
+exports.ParserModule.bind(tokens_1.TOKENS.parserService).toInstance(parser_service_1.ParserService).inContainerScope();
+(0, brandi_1.injected)(parser_service_1.ParserService, tokens_1.TOKENS.loggerService, tokens_1.TOKENS.articlesService);
