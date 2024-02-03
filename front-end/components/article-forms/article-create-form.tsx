@@ -1,7 +1,6 @@
 'use client'
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
 import { z } from "zod"
 
 import { Button } from "@/components/ui/button"
@@ -18,6 +17,7 @@ import { useQueryClient, useMutation } from "@tanstack/react-query"
 import { useRouter } from "next/navigation"
 import { createArticle } from "@/services/articles.service"
 import { CreateArticle } from "@/models/article.model"
+import { useForm } from "react-hook-form"
 
 const CreateArticleSchema = z.object({
   title: z.string().min(1, 'Title is required'),

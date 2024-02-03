@@ -2,10 +2,11 @@
 import React from 'react'
 import { Button } from '../ui/button'
 import { useRouter } from 'next/navigation'
-import { signOut } from 'next-auth/react'
+import { signOut, useSession } from 'next-auth/react'
 
 const Header = () => {
   const router = useRouter()
+  const session = useSession()
   return (
     <header className="flex items-center w-full justify-between p-5 border-b-gray-200 border-b-[1px]">
         <div>
@@ -13,7 +14,7 @@ const Header = () => {
         </div>
         <div>
           <Button onClick={() => router.push('/admin')}>Admin panel</Button>
-          <Button className='ml-2' onClick={() => signOut()}>Logout</Button>
+          {session.data?.user.accessToken && <Button className='ml-2' onClick={() => signOut({ redirect: false })}>Logout</Button>}
         </div>
       </header>
   )

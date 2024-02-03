@@ -16,29 +16,30 @@ interface IToken {
   exp: 1706176994;
 }
 
-interface Tokens {refreshToken: string, accessToken: string}
+interface Tokens {
+  refreshToken: string;
+  accessToken: string;
+}
 
 const refreshToken = async (token: string) => {
+  const res = await axios(`${process.env.NEXT_PUBLIC_baseURL}/auth/refresh`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    data: {
+      refreshToken: token,
+    },
+  })
+    .then((res) => res.data)
+    .catch((err) => {
+      return null;
+    });
 
-  const res = await axios(
-    `${process.env.NEXT_PUBLIC_baseURL}/auth/refresh`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      data: {
-        refreshToken: token,
-      }, 
-    }
-  ).then((res) => res.data).catch((err) => {
-    return null
-  });
-
-  const tokens = res as Tokens
+  const tokens = res as Tokens;
 
   return tokens;
-}
+};
 
 export const authConfig: AuthOptions = {
   providers: [
@@ -49,7 +50,7 @@ export const authConfig: AuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials, req) {
-        if(!credentials?.password && !credentials?.username) {
+        if (!credentials?.password && !credentials?.username) {
           throw new Error("Please enter your email and password");
         }
         const res = await axios(
@@ -64,11 +65,13 @@ export const authConfig: AuthOptions = {
               password: credentials.password,
             },
           }
-        ).then((res) => res.data).catch((err) => {
-          return null
-        });
+        )
+          .then((res) => res.data)
+          .catch((err) => {
+            return null;
+          });
 
-        const user = res
+        const user = res;
         return user;
       },
     }),
@@ -78,7 +81,6 @@ export const authConfig: AuthOptions = {
       // console.log("jwt");
       if (token && token.accessToken && typeof token.accessToken === "string") {
         const decodedToken = jwtDecode<IToken>(token.accessToken);
-        
 
         token.id = decodedToken.id;
         token.role = decodedToken.role;
@@ -87,16 +89,20 @@ export const authConfig: AuthOptions = {
         if (Date.now() / 1000 < decodedToken.exp) {
           return token;
         } else {
-            // console.log("refresh token");
-            if(token && token.refreshToken && typeof token.refreshToken === "string"){
-              try{
-                const tokens = await refreshToken(token.refreshToken);
-                token.accessToken = tokens.accessToken;
-                token.refreshToken = tokens.refreshToken;
-              } catch(e) {
-                signOut()
-              }
+          // console.log("refresh token");
+          if (
+            token &&
+            token.refreshToken &&
+            typeof token.refreshToken === "string"
+          ) {
+            try {
+              const tokens = await refreshToken(token.refreshToken);
+              token.accessToken = tokens.accessToken;
+              token.refreshToken = tokens.refreshToken;
+            } catch (e) {
+              signOut();
             }
+          }
         }
       }
       return { ...token, ...user };
@@ -107,7 +113,7 @@ export const authConfig: AuthOptions = {
       return session;
     },
   },
-  //   pages: {
-  //     signIn: '/signin',
-  //   },
+  pages: {
+    signIn: "/signin",
+  },
 };
