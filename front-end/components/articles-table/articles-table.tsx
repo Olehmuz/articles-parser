@@ -125,7 +125,7 @@ const initColumns = (deleteFunc: (id: string) => any, router: AppRouterInstance)
   return columns
 }
 
-export function DataTableDemo() {
+export function ArticleTable() {
   const router = useRouter()
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
