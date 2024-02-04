@@ -48,11 +48,34 @@ export const authConfig: AuthOptions = {
       credentials: {
         username: { label: "Email", type: "text" },
         password: { label: "Password", type: "password" },
+        // registy: { label: "Register", type: "registy" },
       },
       async authorize(credentials, req) {
         if (!credentials?.password && !credentials?.username) {
           throw new Error("Please enter your email and password");
         }
+        // if(req.query?.type === "register"){
+        //   const res = await axios(
+        //     `${process.env.NEXT_PUBLIC_baseURL}/auth/register`,
+        //     {
+        //       method: "POST",
+        //       headers: {
+        //         "Content-Type": "application/json",
+        //       },
+        //       data: {
+        //         email: credentials.username,
+        //         password: credentials.password,
+        //       },
+        //     }
+        //   )
+        //     .then((res) => res.data)
+        //     .catch((err) => {
+        //       return null;
+        //     });
+  
+        //   const user = res;
+        //   return user;
+        // }
         const res = await axios(
           `${process.env.NEXT_PUBLIC_baseURL}/auth/login`,
           {
@@ -78,7 +101,6 @@ export const authConfig: AuthOptions = {
   ],
   callbacks: {
     async jwt({ token, user }) {
-      // console.log("jwt");
       if (token && token.accessToken && typeof token.accessToken === "string") {
         const decodedToken = jwtDecode<IToken>(token.accessToken);
 
@@ -89,7 +111,6 @@ export const authConfig: AuthOptions = {
         if (Date.now() / 1000 < decodedToken.exp) {
           return token;
         } else {
-          // console.log("refresh token");
           if (
             token &&
             token.refreshToken &&

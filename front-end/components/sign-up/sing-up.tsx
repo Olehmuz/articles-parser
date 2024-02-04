@@ -10,21 +10,24 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import Link from "next/link"
 import { signIn, useSession } from "next-auth/react"
 import { useRouter, useSearchParams } from "next/navigation"
+import axios from "axios"
+import { UserRoles } from "@/lib/roles.enum"
 
 const SignInSchema = z.object({
   email: z.string().email('Email must be valid.').min(1, 'Email is required'),
-  password: z.string().min(8, 'Password is required'),
+  password: z.string().min(8, 'Password must be at least 8 characters'),
 }).required();
 
-export default function SignInPage() {
+export default function SignUpPage() {
   const router = useRouter();
-  const searchParams = useSearchParams()
-  const error = searchParams.get('error');
 
   const session = useSession()
   if(session.data?.user.accessToken) {
     router.push('/admin')
   }
+
+  const searchParams = useSearchParams()
+  const error = searchParams.get('error');
 
 
   const resolver = zodResolver(SignInSchema);
@@ -37,24 +40,38 @@ export default function SignInPage() {
   });
 
   const onSubmit = async (data: { email: string, password: string}) => {
-    await signIn("credentials", {
-      username: data.email,
-      password: data.password,
-      redirect: true,
-      callbackUrl: searchParams.get('callbackUrl') ?? "http://localhost:3000"
-    });
+    try{
+      await axios.post(`${process.env.NEXT_PUBLIC_baseURL}/auth/register`, {
+        email: data.email,
+        password: data.password,
+        role: UserRoles.ADMIN
+      })  
+
+      await signIn("credentials", {
+        username: data.email,
+        password: data.password,
+        redirect: true,
+        callbackUrl: searchParams.get('callbackUrl') ?? "http://localhost:3000"
+      });
+    } catch(e) {
+      console.log(e)  
+       router.push('/signup?error=true')
+       return
+    } 
+
+    
   }
 
   return (
     <Card className="mx-auto max-w-sm">
       <CardHeader className="space-y-1">
-        <CardTitle className="text-2xl font-bold">Login</CardTitle>
-        <CardDescription>Enter your email and password to login to your account</CardDescription>
+        <CardTitle className="text-2xl font-bold">Register</CardTitle>
+        <CardDescription>Enter your email and password to register an account</CardDescription>
       </CardHeader>
       <CardContent>
         {!!error && (
           <p className="bg-red-100 text-red-600 text-center p-2">
-            Authentication Failed.
+            Register Failed.
           </p>
         )}
         <Form {...form}>
@@ -90,11 +107,11 @@ export default function SignInPage() {
               )}
             />
             <Button className="w-full !mt-1" type="submit">
-              Sign In
+              Sign Up
             </Button>
           </form>
         </Form>
-        <CardDescription className="mt-3 text-center">Don&#39;t have an account? <Link className="underline cursor-pointer" href='/signup'>Sign up</Link></CardDescription>
+        <CardDescription className="mt-3 text-center">Already have an account? <Link className="underline cursor-pointer" href='/signin'>Sign in</Link></CardDescription>
       </CardContent>
     </Card>
 
