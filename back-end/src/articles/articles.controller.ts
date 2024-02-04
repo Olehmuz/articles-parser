@@ -14,6 +14,8 @@ import { type IArticlesService } from './intefaces/article-service.inteface'
 import { type CreateArticleDto, CreateArticleDtoSchema } from './dto/create-article.dto'
 import { type UpdateArticleDto, UpdateArticleDtoSchema } from './dto/update-article.dto'
 
+export type IArticlesQueryParams = IPaginationOptions & { search: string }
+
 export class ArticlesController extends BaseController {
   constructor (
     public readonly prefix: string,
@@ -73,7 +75,7 @@ export class ArticlesController extends BaseController {
     res.status(200).send(article)
   }
 
-  async getArticlesList (req: Request<{}, {}, IPaginationOptions & { search: string }>, res: Response): Promise<void> {
+  async getArticlesList (req: Request<{}, {}, IArticlesQueryParams>, res: Response): Promise<void> {
     const page = req.query.page ? +req.query.page : 1
     const limit = req.query.limit ? +req.query.limit : 30
     let search = ''

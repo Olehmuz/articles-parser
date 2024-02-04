@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "main.ts",
   "scripts": {
-    "start": "tsc && node dist/src/main.js",
+    "start": "npx prisma generate && npx prisma db push && tsc && node dist/src/main.js | pino-pretty",
     "start:dev": "nodemon",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint . --ext .ts"
