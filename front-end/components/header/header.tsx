@@ -1,8 +1,8 @@
 'use client'
 import React from 'react'
-import { Button } from '../ui/button'
 import { useRouter } from 'next/navigation'
 import { signOut, useSession } from 'next-auth/react'
+import { Button } from '../ui/button'
 
 const Header = () => {
   const router = useRouter()

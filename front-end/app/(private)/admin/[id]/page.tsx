@@ -1,10 +1,10 @@
 'use client'
+import React from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { Loader } from 'lucide-react'
 import { ArticleUpdateForm } from '@/components/article-forms/article-update-form'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { getArticleById } from '@/services/articles.service'
-import { useQuery } from '@tanstack/react-query'
-import { Loader } from 'lucide-react'
-import React from 'react'
 
 const ArticlesUpdate = ({ params: {id} }: { params: { id: string } }) => {
   const { data, isLoading, isError } = useQuery({

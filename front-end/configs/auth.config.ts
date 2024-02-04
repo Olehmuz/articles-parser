@@ -1,7 +1,7 @@
+import axios from "axios";
 import { AuthOptions } from "next-auth";
 import { jwtDecode } from "jwt-decode";
 import CredentialsProvider from "next-auth/providers/credentials";
-import axios, { AxiosError } from "axios";
 import { signOut } from "next-auth/react";
 import { UserRoles } from "@/lib/roles.enum";
 
@@ -48,34 +48,12 @@ export const authConfig: AuthOptions = {
       credentials: {
         username: { label: "Email", type: "text" },
         password: { label: "Password", type: "password" },
-        // registy: { label: "Register", type: "registy" },
       },
       async authorize(credentials, req) {
         if (!credentials?.password && !credentials?.username) {
           throw new Error("Please enter your email and password");
         }
-        // if(req.query?.type === "register"){
-        //   const res = await axios(
-        //     `${process.env.NEXT_PUBLIC_baseURL}/auth/register`,
-        //     {
-        //       method: "POST",
-        //       headers: {
-        //         "Content-Type": "application/json",
-        //       },
-        //       data: {
-        //         email: credentials.username,
-        //         password: credentials.password,
-        //       },
-        //     }
-        //   )
-        //     .then((res) => res.data)
-        //     .catch((err) => {
-        //       return null;
-        //     });
-  
-        //   const user = res;
-        //   return user;
-        // }
+
         const res = await axios(
           `${process.env.NEXT_PUBLIC_baseURL}/auth/login`,
           {

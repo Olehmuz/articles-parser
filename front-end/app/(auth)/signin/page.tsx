@@ -1,12 +1,9 @@
-import SignInPage from '@/components/sign-in/sing-in'
-
 import React from 'react'
+import SignInPage from '@/components/sign-in/sing-in'
 
 const SignIn = () => {
   return (
-    <div className='flex w-full h-full justify-center items-center'>
-      <SignInPage />
-    </div>
+    <SignInPage />
   )
 }
 

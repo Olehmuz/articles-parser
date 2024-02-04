@@ -1,6 +1,6 @@
 'use client'
-import { ArticleTable } from '@/components/articles-table/articles-table'
 import React from 'react'
+import { ArticleTable } from '@/components/articles-table/articles-table'
 
 const Articles = () => {
 

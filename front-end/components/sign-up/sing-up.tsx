@@ -1,17 +1,19 @@
 'use client'
-import { CardTitle, CardDescription, CardHeader, CardContent, Card } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { useForm } from "react-hook-form"
 
+import axios from "axios"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form"
 import Link from "next/link"
 import { signIn, useSession } from "next-auth/react"
 import { useRouter, useSearchParams } from "next/navigation"
-import axios from "axios"
+import { useForm } from "react-hook-form"
+
+import { CardTitle, CardDescription, CardHeader, CardContent, Card } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { UserRoles } from "@/lib/roles.enum"
+
 
 const SignInSchema = z.object({
   email: z.string().email('Email must be valid.').min(1, 'Email is required'),
@@ -28,7 +30,6 @@ export default function SignUpPage() {
 
   const searchParams = useSearchParams()
   const error = searchParams.get('error');
-
 
   const resolver = zodResolver(SignInSchema);
   const form = useForm<z.infer<typeof SignInSchema>>({
@@ -54,12 +55,9 @@ export default function SignUpPage() {
         callbackUrl: searchParams.get('callbackUrl') ?? "http://localhost:3000"
       });
     } catch(e) {
-      console.log(e)  
        router.push('/signup?error=true')
        return
     } 
-
-    
   }
 
   return (
@@ -114,9 +112,6 @@ export default function SignUpPage() {
         <CardDescription className="mt-3 text-center">Already have an account? <Link className="underline cursor-pointer" href='/signin'>Sign in</Link></CardDescription>
       </CardContent>
     </Card>
-
-
-
   )
 }
 

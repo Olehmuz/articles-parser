@@ -4,6 +4,8 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
+import { useQueryClient, useMutation } from "@tanstack/react-query"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import {
   Form,
@@ -14,11 +16,8 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { useQueryClient, useMutation, useQuery } from "@tanstack/react-query"
-import { useRouter } from "next/navigation"
-import { getArticleById, updateArticle } from "@/services/articles.service"
+import { updateArticle } from "@/services/articles.service"
 import { Article, UpdateArticle } from "@/models/article.model"
-import { Loader } from "lucide-react"
 
 const UpdateArticleSchema = z.object({
   title: z.string().min(1, 'Title is required'),
@@ -39,7 +38,7 @@ export function ArticleUpdateForm({article}: {article: Article}) {
   const articleUpdateMutation = useMutation({
     mutationKey: ['articles'],
     mutationFn: (updatedArticle: UpdateArticle) => updateArticle(article.id, updatedArticle),
-    onError: (err, variables, rollback) => {
+    onError: (err) => {
       console.log(err)
     },
     onSettled: () => {

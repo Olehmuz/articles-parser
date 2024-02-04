@@ -1,6 +1,12 @@
 "use client"
 
 import * as React from "react"
+
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { useRouter } from "next/navigation"
+import Link from "next/link"
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime"
+
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -10,11 +16,11 @@ import {
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
-  getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table"
-import { ArrowUpDown, ChevronDown, MoreHorizontal, Plus, Trash } from "lucide-react"
+
+import { ArrowUpDown, ChevronDown, MoreHorizontal, Plus } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -37,12 +43,8 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { Article } from "@/models/article.model"
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { deleteArticle, getArticlesList } from "@/services/articles.service"
 
-import { useRouter } from "next/navigation"
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime"
-import Link from "next/link"
 
 
 

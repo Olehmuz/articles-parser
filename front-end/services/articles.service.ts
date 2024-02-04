@@ -1,7 +1,7 @@
 
+import { PaginationState } from "@tanstack/react-table";
 import { $axios } from "@/lib/axios.base";
 import { Article, CreateArticle, UpdateArticle } from "@/models/article.model";
-import { PaginationState } from "@tanstack/react-table";
 
 type ArticleResponse = {data: Article[], currentPage: number, totalPages: number}
 
